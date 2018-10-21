@@ -140,7 +140,7 @@ public class KafkaApplication {
     }
 
     @KafkaListener(topicPartitions = @TopicPartition(topic = "${partitioned.topic.name}",
-        partitions = {"0", "3"}))
+        partitions = {"0", "3"}), containerFactory = "partitionsKafkaListenerContainerFactory")
     public void listenToParition(@Payload String message,
         @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) {
       System.out.println("Received Message: " + message + " from partition: " + partition);
@@ -150,14 +150,14 @@ public class KafkaApplication {
     @KafkaListener(topics = "${filtered.topic.name}",
         containerFactory = "filterKafkaListenerContainerFactory")
     public void listenWithFilter(String message) {
-      System.out.println("Recieved Message in filtered listener: " + message);
+      System.out.println("Received Message in filtered listener: " + message);
       this.filterLatch.countDown();
     }
 
     @KafkaListener(topics = "${greeting.topic.name}",
         containerFactory = "greetingKafkaListenerContainerFactory")
     public void greetingListener(Greeting greeting) {
-      System.out.println("Recieved greeting message: " + greeting);
+      System.out.println("Received greeting message: " + greeting);
       this.greetingLatch.countDown();
     }
 
