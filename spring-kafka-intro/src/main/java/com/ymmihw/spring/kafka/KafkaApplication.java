@@ -30,6 +30,7 @@ public class KafkaApplication {
      * barKafkaListenerContainerFactory respectively. It will also be recieved by the listener with
      * headersKafkaListenerContainerFactory as container factory
      */
+    listener.latch.await(10, TimeUnit.SECONDS);
     producer.sendMessage("Hello, World!");
     listener.latch.await(10, TimeUnit.SECONDS);
 
