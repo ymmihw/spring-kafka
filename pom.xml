@@ -25,4 +25,7 @@
    <artifactId>spring-boot-starter</artifactId>
   </dependency>
  </dependencies>
+ <modules>
+  <module>spring-kafka-intro</module>
+ </modules>
 </project>
