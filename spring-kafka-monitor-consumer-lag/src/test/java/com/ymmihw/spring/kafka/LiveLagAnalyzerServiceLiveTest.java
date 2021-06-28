@@ -11,22 +11,23 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
-@RunWith(SpringRunner.class)
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@SpringBootTest
 @DirtiesContext
 @EmbeddedKafka(
     partitions = 1,
@@ -48,7 +49,7 @@ public class LiveLagAnalyzerServiceLiveTest {
   private static final int BATCH_SIZE = 100;
   private static final long POLL_DURATION = 1000L;
 
-  @Before
+  @BeforeEach
   public void setup() throws Exception {
     initProducer();
     initConsumer();
@@ -63,40 +64,40 @@ public class LiveLagAnalyzerServiceLiveTest {
     long consumeLag = 0L;
     consume();
     Map<TopicPartition, Long> lag = lagAnalyzerService.analyzeLag(GROUP_ID);
-    Assert.assertNotNull(lag);
-    Assert.assertEquals(1, lag.size());
+    assertNotNull(lag);
+    assertEquals(1, lag.size());
     consumeLag = lag.get(TOPIC_PARTITION);
-    Assert.assertEquals(0L, consumeLag);
+    assertEquals(0L, consumeLag);
     produce();
     produce();
     lag = lagAnalyzerService.analyzeLag(GROUP_ID);
-    Assert.assertNotNull(lag);
-    Assert.assertEquals(1, lag.size());
+    assertNotNull(lag);
+    assertEquals(1, lag.size());
     consumeLag = lag.get(TOPIC_PARTITION);
-    Assert.assertEquals(200L, consumeLag);
+    assertEquals(200L, consumeLag);
 
     produce();
     produce();
 
     lag = lagAnalyzerService.analyzeLag(GROUP_ID);
-    Assert.assertNotNull(lag);
-    Assert.assertEquals(1, lag.size());
+    assertNotNull(lag);
+    assertEquals(1, lag.size());
     consumeLag = lag.get(TOPIC_PARTITION);
-    Assert.assertEquals(400L, consumeLag);
+    assertEquals(400L, consumeLag);
 
     produce();
     lag = lagAnalyzerService.analyzeLag(GROUP_ID);
-    Assert.assertNotNull(lag);
-    Assert.assertEquals(1, lag.size());
+    assertNotNull(lag);
+    assertEquals(1, lag.size());
     consumeLag = lag.get(TOPIC_PARTITION);
-    Assert.assertEquals(500L, consumeLag);
+    assertEquals(500L, consumeLag);
 
     consume();
     lag = lagAnalyzerService.analyzeLag(GROUP_ID);
-    Assert.assertNotNull(lag);
-    Assert.assertEquals(1, lag.size());
+    assertNotNull(lag);
+    assertEquals(1, lag.size());
     consumeLag = lag.get(TOPIC_PARTITION);
-    Assert.assertEquals(consumeLag, 0L);
+    assertEquals(consumeLag, 0L);
   }
 
   @Test
@@ -104,10 +105,10 @@ public class LiveLagAnalyzerServiceLiveTest {
       throws ExecutionException, InterruptedException {
     produce();
     Map<TopicPartition, Long> lagByTopicPartition = lagAnalyzerService.analyzeLag(GROUP_ID);
-    Assert.assertNotNull(lagByTopicPartition);
-    Assert.assertEquals(1, lagByTopicPartition.size());
+    assertNotNull(lagByTopicPartition);
+    assertEquals(1, lagByTopicPartition.size());
     long LAG = lagByTopicPartition.get(TOPIC_PARTITION);
-    Assert.assertEquals(BATCH_SIZE, LAG);
+    assertEquals(BATCH_SIZE, LAG);
   }
 
   @Test
@@ -118,10 +119,10 @@ public class LiveLagAnalyzerServiceLiveTest {
     produce();
     produce();
     Map<TopicPartition, Long> lagByTopicPartition = lagAnalyzerService.analyzeLag(GROUP_ID);
-    Assert.assertNotNull(lagByTopicPartition);
-    Assert.assertEquals(1, lagByTopicPartition.size());
+    assertNotNull(lagByTopicPartition);
+    assertEquals(1, lagByTopicPartition.size());
     long LAG = lagByTopicPartition.get(TOPIC_PARTITION);
-    Assert.assertEquals(2 * BATCH_SIZE, LAG);
+    assertEquals(2 * BATCH_SIZE, LAG);
   }
 
   private static void consume() {
