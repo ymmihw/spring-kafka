@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.2</version>
+        <version>2.7.5</version>
         <relativePath/>
     </parent>
     <groupId>com.ymmihw.spring</groupId>
@@ -46,6 +46,6 @@
     </dependencies>
     <modules>
         <module>spring-kafka-intro</module>
-        <module>spring-kafka-monitor-consumer-lag</module>
+        <module>spring-kafka-retry</module>
     </modules>
 </project>
