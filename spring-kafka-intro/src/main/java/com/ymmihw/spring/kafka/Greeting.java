@@ -1,4 +1,4 @@
-package com.ymmihw.spring.kafka.kafka;
+package com.ymmihw.spring.kafka;
 
 public class Greeting {
 

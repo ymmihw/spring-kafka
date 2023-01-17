@@ -1,4 +1,4 @@
-package com.ymmihw.spring.kafka.kafka;
+package com.ymmihw.spring.kafka;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
